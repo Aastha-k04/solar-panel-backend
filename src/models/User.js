@@ -188,16 +188,24 @@ userSchema.statics.countByRole = function (role) {
 // MIDDLEWARE (Hooks)
 // ═══════════════════════════════════════════════════════
 
+// Pre-save hook - Hash password if modified
 userSchema.pre('save', async function () {
+  // Ensure email is lowercase
   if (this.isModified('email')) {
     this.email = this.email.toLowerCase();
   }
+
+  // // Hash password only if it's modified (or new)
+  // if (this.isModified('password')) {
+  //   // Password hashing is now handled in authService
+  //   // This hook is kept for future custom logic
+  // }
 });
 
-// Post-save hook (example: logging)
-userSchema.post('save', function (doc) {
-  console.log(`✅ User saved: ${doc.email} (${doc.role})`);
-});
+// // Post-save hook (example: logging)
+// userSchema.post('save', function (doc) {
+//   console.log(`✅ User saved: ${doc.email} (${doc.role})`);
+// });
 
 // ═══════════════════════════════════════════════════════
 // MODEL EXPORT

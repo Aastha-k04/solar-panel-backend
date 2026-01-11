@@ -149,6 +149,36 @@ const options = {
           enum: ['ADMIN', 'CUSTOMER', 'TECHNICIAN'],
           description: 'User role in the system',
         },
+        // Add to components.schemas
+        AuthResponse: {
+          type: 'object',
+          properties: {
+            success: {
+              type: 'boolean',
+              example: true,
+            },
+            message: {
+              type: 'string',
+              example: 'User registered successfully',
+            },
+            data: {
+              type: 'object',
+              properties: {
+                user: {
+                  $ref: '#/components/schemas/User',
+                },
+                accessToken: {
+                  type: 'string',
+                  example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+                },
+                refreshToken: {
+                  type: 'string',
+                  example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+                },
+              },
+            },
+          },
+        },
         // ═══════════════════════════════════════════════════════
         // GENERAL SCHEMAS
         // ═══════════════════════════════════════════════════════
@@ -228,7 +258,7 @@ const options = {
       },
     ],
   },
-  apis: ['./src/app.js'], // Path to the API docs
+  apis: ['./src/app.js', './src/routes/*.js'], // Path to the API docs
 };
 
 const swaggerSpec = swaggerJsdoc(options);

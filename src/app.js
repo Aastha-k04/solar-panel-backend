@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger.js';
 import database from './config/database.js';
+import routes from './routes/index.js';
 
 
 // Create Express app
@@ -76,6 +77,11 @@ app.get('/', (req, res) => {
     },
   });
 });
+
+// ═══════════════════════════════════════════════════════
+// API ROUTES
+// ═══════════════════════════════════════════════════════
+app.use(routes);
 
 // ═══════════════════════════════════════════════════════
 // SWAGGER API DOCUMENTATION
