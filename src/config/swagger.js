@@ -51,7 +51,7 @@ const options = {
       },
       {
         name: 'Auth',
-        description: 'Authentication and authorization endpoints (coming soon)',
+        description: 'Authentication and authorization endpoints',
       },
       {
         name: 'Users',
@@ -176,6 +176,50 @@ const options = {
                   example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
                 },
               },
+            },
+          },
+        },
+        SolarPanel: {
+          type: 'object',
+          properties: {
+            _id: {
+              type: 'string',
+              example: '507f1f77bcf86cd799439011',
+            },
+            name: {
+              type: 'string',
+              example: 'Premium Solar Panel 500W',
+            },
+            capacityKW: {
+              type: 'number',
+              example: 0.5,
+              description: 'Panel capacity in kilowatts',
+            },
+            price: {
+              type: 'number',
+              example: 15000,
+              description: 'Price in local currency',
+            },
+            description: {
+              type: 'string',
+              example: 'High efficiency monocrystalline solar panel',
+            },
+            suitableFor: {
+              type: 'string',
+              enum: ['home', 'commercial'],
+              example: 'home',
+            },
+            isActive: {
+              type: 'boolean',
+              example: true,
+            },
+            createdAt: {
+              type: 'string',
+              format: 'date-time',
+            },
+            updatedAt: {
+              type: 'string',
+              format: 'date-time',
             },
           },
         },

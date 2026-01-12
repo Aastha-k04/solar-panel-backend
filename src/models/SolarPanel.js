@@ -6,47 +6,47 @@ import mongoose from 'mongoose';
  */
 
 const solarPanelSchema = new mongoose.Schema(
-    {
-        name: {
-            type: String,
-            required: [true, 'Panel name is required'],
-            trim: true,
-            maxlength: [100, 'Panel name cannot exceed 100 characters'],
-        },
-        capacityKW: {
-            type: Number,
-            required: [true, 'Capacity is required'],
-            min: [0.1, 'Capacity must be at least 0.1 KW'],
-            max: [1000, 'Capacity cannot exceed 1000 KW'],
-        },
-        price: {
-            type: Number,
-            required: [true, 'Price is required'],
-            min: [0, 'Price must be a positive number'],
-        },
-        description: {
-            type: String,
-            trim: true,
-            maxlength: [500, 'Description cannot exceed 500 characters'],
-        },
-        suitableFor: {
-            type: String,
-            enum: {
-                values: ['home', 'commercial'],
-                message: 'Suitable for must be either home or commercial',
-            },
-            required: [true, 'Suitable for field is required'],
-            lowercase: true,
-        },
-        isActive: {
-            type: Boolean,
-            default: true,
-            index: true,
-        },
+  {
+    name: {
+      type: String,
+      required: [true, 'Panel name is required'],
+      trim: true,
+      maxlength: [100, 'Panel name cannot exceed 100 characters'],
     },
-    {
-        timestamps: true,
-    }
+    capacityKW: {
+      type: Number,
+      required: [true, 'Capacity is required'],
+      min: [0.1, 'Capacity must be at least 0.1 KW'],
+      max: [1000, 'Capacity cannot exceed 1000 KW'],
+    },
+    price: {
+      type: Number,
+      required: [true, 'Price is required'],
+      min: [0, 'Price must be a positive number'],
+    },
+    description: {
+      type: String,
+      trim: true,
+      maxlength: [500, 'Description cannot exceed 500 characters'],
+    },
+    suitableFor: {
+      type: String,
+      enum: {
+        values: ['home', 'commercial'],
+        message: 'Suitable for must be either home or commercial',
+      },
+      required: [true, 'Suitable for field is required'],
+      lowercase: true,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+      index: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
 );
 
 // Index for searching
