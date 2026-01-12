@@ -223,6 +223,48 @@ const options = {
             },
           },
         },
+        Cart: {
+          type: 'object',
+          properties: {
+            _id: {
+              type: 'string',
+              example: '507f1f77bcf86cd799439011',
+            },
+            user: {
+              type: 'string',
+              description: 'User ID reference',
+              example: '507f1f77bcf86cd799439011',
+            },
+            items: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  solarPanel: {
+                    $ref: '#/components/schemas/SolarPanel',
+                  },
+                  quantity: {
+                    type: 'number',
+                    example: 2,
+                  },
+                },
+              },
+            },
+            totalAmount: {
+              type: 'number',
+              example: 30000,
+              description: 'Total cart value (calculated on server)',
+            },
+            createdAt: {
+              type: 'string',
+              format: 'date-time',
+            },
+            updatedAt: {
+              type: 'string',
+              format: 'date-time',
+            },
+          },
+        },
         // ═══════════════════════════════════════════════════════
         // GENERAL SCHEMAS
         // ═══════════════════════════════════════════════════════

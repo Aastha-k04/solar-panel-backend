@@ -1,6 +1,7 @@
 import express from 'express';
 import authRoutes from './auth.routes.js';
 import solarPanelRoutes from './solarPanel.routes.js';
+import cartRoutes from './cart.routes.js';
 
 const router = express.Router();
 
@@ -10,5 +11,6 @@ const API_VERSION = process.env.API_VERSION || 'v1';
 // Mount routes
 router.use(`/api/${API_VERSION}/auth`, authRoutes);
 router.use(`/api/${API_VERSION}/panels`, solarPanelRoutes);
+router.use(`/api/${API_VERSION}/cart`, cartRoutes);
 
 export default router;

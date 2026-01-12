@@ -13,7 +13,8 @@
     "test:password": "node scripts/testPasswordExclusion.js",
     "test:auth-service": "node scripts/testAuthService.js",
     "test:auth-flow": "node scripts/testAuthFlow.js",
-    "test:panels": "node scripts/testSolarPanel.js"
+    "test:panels": "node scripts/testSolarPanel.js",
+    "test:cart": "node scripts/testCartFlow.js"
   },
   "keywords": [
     "solar",
