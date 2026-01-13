@@ -14,7 +14,8 @@
     "test:auth-service": "node scripts/testAuthService.js",
     "test:auth-flow": "node scripts/testAuthFlow.js",
     "test:panels": "node scripts/testSolarPanel.js",
-    "test:cart": "node scripts/testCartFlow.js"
+    "test:cart": "node scripts/testCartFlow.js",
+    "test:orders": "node scripts/testOrderFlow.js"
   },
   "keywords": [
     "solar",

@@ -59,7 +59,7 @@ const options = {
       },
       {
         name: 'Solar Panels',
-        description: 'Solar panel product management (coming soon)',
+        description: 'Solar panel product management',
       },
       {
         name: 'Orders',
@@ -254,6 +254,69 @@ const options = {
               type: 'number',
               example: 30000,
               description: 'Total cart value (calculated on server)',
+            },
+            createdAt: {
+              type: 'string',
+              format: 'date-time',
+            },
+            updatedAt: {
+              type: 'string',
+              format: 'date-time',
+            },
+          },
+        },
+        Order: {
+          type: 'object',
+          properties: {
+            _id: {
+              type: 'string',
+              example: '507f1f77bcf86cd799439011',
+            },
+            user: {
+              type: 'object',
+              properties: {
+                _id: {
+                  type: 'string',
+                },
+                email: {
+                  type: 'string',
+                },
+                firstName: {
+                  type: 'string',
+                },
+                lastName: {
+                  type: 'string',
+                },
+              },
+            },
+            items: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  solarPanel: {
+                    $ref: '#/components/schemas/SolarPanel',
+                  },
+                  quantity: {
+                    type: 'number',
+                    example: 2,
+                  },
+                  priceAtPurchase: {
+                    type: 'number',
+                    example: 15000,
+                    description: 'Price at the time of order creation',
+                  },
+                },
+              },
+            },
+            totalAmount: {
+              type: 'number',
+              example: 30000,
+            },
+            status: {
+              type: 'string',
+              enum: ['PENDING', 'PAID', 'CANCELLED'],
+              example: 'PENDING',
             },
             createdAt: {
               type: 'string',
