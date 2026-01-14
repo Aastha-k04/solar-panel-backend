@@ -55,7 +55,7 @@ const router = express.Router();
  *                 example: Doe
  *               phoneNumber:
  *                 type: string
- *                 example: "+1234567890"
+ *                 example: "9876543210"
  *     responses:
  *       201:
  *         description: User registered successfully

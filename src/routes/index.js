@@ -4,6 +4,7 @@ import solarPanelRoutes from './solarPanel.routes.js';
 import cartRoutes from './cart.routes.js';
 import orderRoutes from './order.routes.js';
 import paymentRoutes from './payment.routes.js';
+import installationRoutes from './installation.routes.js';
 
 const router = express.Router();
 
@@ -16,5 +17,6 @@ router.use(`/api/${API_VERSION}/panels`, solarPanelRoutes);
 router.use(`/api/${API_VERSION}/cart`, cartRoutes);
 router.use(`/api/${API_VERSION}/orders`, orderRoutes);
 router.use(`/api/${API_VERSION}/payments`, paymentRoutes);
+router.use(`/api/${API_VERSION}/installations`, installationRoutes);
 
 export default router;

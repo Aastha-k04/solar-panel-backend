@@ -382,6 +382,69 @@ const options = {
             },
           },
         },
+        Installation: {
+          type: 'object',
+          properties: {
+            _id: {
+              type: 'string',
+              example: '507f1f77bcf86cd799439011',
+            },
+            order: {
+              $ref: '#/components/schemas/Order',
+            },
+            customer: {
+              type: 'object',
+              properties: {
+                _id: {
+                  type: 'string',
+                },
+                email: {
+                  type: 'string',
+                },
+                firstName: {
+                  type: 'string',
+                },
+                lastName: {
+                  type: 'string',
+                },
+              },
+            },
+            technician: {
+              type: 'object',
+              properties: {
+                _id: {
+                  type: 'string',
+                },
+                email: {
+                  type: 'string',
+                },
+                firstName: {
+                  type: 'string',
+                },
+                lastName: {
+                  type: 'string',
+                },
+              },
+            },
+            status: {
+              type: 'string',
+              enum: ['PENDING', 'IN_PROGRESS', 'COMPLETED'],
+              example: 'PENDING',
+            },
+            notes: {
+              type: 'string',
+              example: 'Installation scheduled for tomorrow',
+            },
+            createdAt: {
+              type: 'string',
+              format: 'date-time',
+            },
+            updatedAt: {
+              type: 'string',
+              format: 'date-time',
+            },
+          },
+        },
         // ═══════════════════════════════════════════════════════
         // GENERAL SCHEMAS
         // ═══════════════════════════════════════════════════════

@@ -16,7 +16,8 @@
     "test:panels": "node scripts/testSolarPanel.js",
     "test:cart": "node scripts/testCartFlow.js",
     "test:orders": "node scripts/testOrderFlow.js",
-    "test:payments": "node scripts/testPaymentFlow.js"
+    "test:payments": "node scripts/testPaymentFlow.js",
+    "test:installations": "node scripts/testInstallationFlow.js"
   },
   "keywords": [
     "solar",
