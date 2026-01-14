@@ -445,6 +445,71 @@ const options = {
             },
           },
         },
+        Review: {
+          type: 'object',
+          properties: {
+            _id: {
+              type: 'string',
+              example: '507f1f77bcf86cd799439011',
+            },
+            order: {
+              $ref: '#/components/schemas/Order',
+            },
+            customer: {
+              type: 'object',
+              properties: {
+                _id: {
+                  type: 'string',
+                },
+                email: {
+                  type: 'string',
+                },
+                firstName: {
+                  type: 'string',
+                },
+                lastName: {
+                  type: 'string',
+                },
+              },
+            },
+            technician: {
+              type: 'object',
+              nullable: true,
+              properties: {
+                _id: {
+                  type: 'string',
+                },
+                email: {
+                  type: 'string',
+                },
+                firstName: {
+                  type: 'string',
+                },
+                lastName: {
+                  type: 'string',
+                },
+              },
+            },
+            rating: {
+              type: 'integer',
+              minimum: 1,
+              maximum: 5,
+              example: 5,
+            },
+            comment: {
+              type: 'string',
+              example: 'Excellent service! Very professional installation.',
+            },
+            createdAt: {
+              type: 'string',
+              format: 'date-time',
+            },
+            updatedAt: {
+              type: 'string',
+              format: 'date-time',
+            },
+          },
+        },
         // ═══════════════════════════════════════════════════════
         // GENERAL SCHEMAS
         // ═══════════════════════════════════════════════════════

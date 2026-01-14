@@ -17,7 +17,8 @@
     "test:cart": "node scripts/testCartFlow.js",
     "test:orders": "node scripts/testOrderFlow.js",
     "test:payments": "node scripts/testPaymentFlow.js",
-    "test:installations": "node scripts/testInstallationFlow.js"
+    "test:installations": "node scripts/testInstallationFlow.js",
+    "test:reviews": "node scripts/testReviewFlow.js"
   },
   "keywords": [
     "solar",
