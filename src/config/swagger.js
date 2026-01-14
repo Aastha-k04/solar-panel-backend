@@ -328,6 +328,60 @@ const options = {
             },
           },
         },
+        Payment: {
+          type: 'object',
+          properties: {
+            _id: {
+              type: 'string',
+              example: '507f1f77bcf86cd799439011',
+            },
+            user: {
+              type: 'object',
+              properties: {
+                _id: {
+                  type: 'string',
+                },
+                email: {
+                  type: 'string',
+                },
+                firstName: {
+                  type: 'string',
+                },
+                lastName: {
+                  type: 'string',
+                },
+              },
+            },
+            order: {
+              $ref: '#/components/schemas/Order',
+            },
+            amount: {
+              type: 'number',
+              example: 35000,
+            },
+            currency: {
+              type: 'string',
+              example: 'INR',
+            },
+            paymentIntentId: {
+              type: 'string',
+              example: 'pi_3ABC123def456GHI',
+            },
+            status: {
+              type: 'string',
+              enum: ['CREATED', 'SUCCESS', 'FAILED'],
+              example: 'SUCCESS',
+            },
+            createdAt: {
+              type: 'string',
+              format: 'date-time',
+            },
+            updatedAt: {
+              type: 'string',
+              format: 'date-time',
+            },
+          },
+        },
         // ═══════════════════════════════════════════════════════
         // GENERAL SCHEMAS
         // ═══════════════════════════════════════════════════════
