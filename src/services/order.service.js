@@ -125,6 +125,45 @@ class OrderService {
 
     return true;
   }
+
+  /**
+   * Cancel an order
+   * @param {string} orderId
+   * @param {string} userId - For ownership verification
+   * @param {string} userRole - To allow admin to cancel any order
+   * @returns {Promise<Object>}
+   */
+  async cancelOrder(orderId, userId, userRole) {
+    const order = await Order.findById(orderId)
+      .populate('items.solarPanel')
+      .populate('user', 'email firstName lastName');
+
+    if (!order) {
+      const error = new Error('Order not found');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    // Check ownership (unless admin)
+    if (userRole !== 'ADMIN' && order.user._id.toString() !== userId) {
+      const error = new Error('You do not have permission to cancel this order');
+      error.statusCode = 403;
+      throw error;
+    }
+
+    // Can only cancel PENDING orders
+    if (order.status !== ORDER_STATUS.PENDING) {
+      const error = new Error(`Cannot cancel order with status: ${order.status}. Only PENDING orders can be cancelled.`);
+      error.statusCode = 400;
+      throw error;
+    }
+
+    // Update status to CANCELLED
+    order.status = ORDER_STATUS.CANCELLED;
+    await order.save();
+
+    return order;
+  }
 }
 
 // Export singleton instance

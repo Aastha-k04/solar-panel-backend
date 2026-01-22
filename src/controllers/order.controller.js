@@ -97,6 +97,31 @@ class OrderController {
       next(error);
     }
   }
+
+  /**
+   * Cancel an order
+   * @route PUT /api/v1/orders/:id/cancel
+   * @access Customer (own orders) or Admin (any order)
+   */
+  async cancelOrder(req, res, next) {
+    try {
+      const { id } = req.params;
+      const userId = req.user.userId;
+      const userRole = req.user.role;
+
+      const order = await orderService.cancelOrder(id, userId, userRole);
+
+      res.status(200).json({
+        success: true,
+        message: 'Order cancelled successfully',
+        data: {
+          order,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 // Export singleton instance
