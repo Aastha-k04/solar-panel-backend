@@ -82,6 +82,57 @@ class AuthController {
       next(error);
     }
   }
+
+  /**
+   * Update current user profile
+   * @route PUT /api/v1/auth/me
+   * @access Protected
+   */
+  async updateProfile(req, res, next) {
+    try {
+      const { firstName, lastName, phoneNumber, password } = req.body;
+
+      // DEBUG: Log what multer provides
+      console.log('=== Profile Update Debug ===');
+      console.log('req.file:', req.file);
+      console.log('req.body.profileImage:', req.body.profileImage, typeof req.body.profileImage);
+      console.log('===========================');
+
+      // Initialize profileImage as undefined (will preserve existing if not updated)
+      let profileImage;
+
+      // Handle file upload - prioritize uploaded file
+      if (req.file) {
+        // Construct full URL (adjust based on your deployment)
+        const baseUrl = `${req.protocol}://${req.get('host')}`;
+        profileImage = `${baseUrl}/uploads/profiles/${req.file.filename}`;
+        console.log('Using uploaded file, profileImage URL:', profileImage);
+      } else if (req.body.profileImage && typeof req.body.profileImage === 'string' && req.body.profileImage.trim()) {
+        // Only use body profileImage if it's a valid non-empty string (not an object from multer)
+        profileImage = req.body.profileImage.trim();
+        console.log('Using body profileImage:', profileImage);
+      }
+      // If neither file nor valid string URL, profileImage remains undefined and existing image is preserved
+
+      const updatedUser = await authService.updateProfile(req.user.userId, {
+        firstName,
+        lastName,
+        phoneNumber,
+        profileImage,
+        password
+      });
+
+      res.status(200).json({
+        success: true,
+        message: 'Profile updated successfully',
+        data: {
+          user: updatedUser,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 // Export singleton instance

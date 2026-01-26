@@ -1,7 +1,8 @@
 import express from 'express';
 import authController from '../controllers/auth.controller.js';
-import { validateRegister, validateLogin } from '../validators/auth.validator.js';
+import { validateRegister, validateLogin, validateUpdateProfile } from '../validators/auth.validator.js';
 import { authenticate } from '../middlewares/auth.middleware.js';
+import { uploadProfileImage } from '../middlewares/upload.middleware.js';
 
 import { authorize, adminOnly, customerOnly, technicianOnly } from '../middlewares/roleCheck.middleware.js';
 import USER_ROLES from '../constants/roles.js';
@@ -154,6 +155,46 @@ router.post('/login', validateLogin, authController.login.bind(authController));
  *               $ref: '#/components/schemas/Error'
  */
 router.get('/me', authenticate, authController.getMe.bind(authController));
+
+/**
+ * @swagger
+ * /api/v1/auth/me:
+ *   put:
+ *     summary: Update current user profile
+ *     tags: [Auth]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               profileImage:
+ *                 type: string
+ *                 format: binary
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               phoneNumber:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Profile updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Unauthorized
+ */
+router.put('/me', authenticate, uploadProfileImage.single('profileImage'), validateUpdateProfile, authController.updateProfile.bind(authController));
 
 
 

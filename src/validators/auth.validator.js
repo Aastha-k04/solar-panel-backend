@@ -69,3 +69,34 @@ export const validateLogin = (req, res, next) => {
 
   next();
 };
+
+export const validateUpdateProfile = (req, res, next) => {
+  const { firstName, lastName, phoneNumber } = req.body;
+  const errors = [];
+
+  // First name validation (optional)
+  if (firstName && firstName.length > 50) {
+    errors.push('First name cannot exceed 50 characters');
+  }
+
+  // Last name validation (optional)
+  if (lastName && lastName.length > 50) {
+    errors.push('Last name cannot exceed 50 characters');
+  }
+
+  // Phone number validation (optional but if provided must be valid)
+  // Simple regex for demonstration, or rely on model validation
+  if (phoneNumber && !/^[\d\+\-\s\(\)]{8,20}$/.test(phoneNumber)) {
+    errors.push('Invalid phone number format');
+  }
+
+  if (errors.length > 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'Validation failed',
+      errors,
+    });
+  }
+
+  next();
+};

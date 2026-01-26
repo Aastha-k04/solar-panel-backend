@@ -209,6 +209,49 @@ class AuthService {
 
     return user.toSafeObject();
   }
+
+  /**
+   * Update user profile
+   * @param {string} userId - User ID
+   * @param {Object} updateData - Data to update
+   * @returns {Promise<Object>} Updated user object
+   */
+  async updateProfile(userId, updateData) {
+    console.log('=== Auth Service updateProfile ===');
+    console.log('updateData received:', updateData);
+
+    const user = await User.findById(userId);
+    if (!user) {
+      const error = new Error('User not found');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    console.log('User before update - profileImage:', user.profileImage);
+
+    // Update fields if provided
+    if (updateData.firstName !== undefined) user.firstName = updateData.firstName;
+    if (updateData.lastName !== undefined) user.lastName = updateData.lastName;
+    if (updateData.phoneNumber !== undefined) user.phoneNumber = updateData.phoneNumber;
+    // Only update profileImage if a valid URL is provided (prevents null/empty from overwriting)
+    if (updateData.profileImage) {
+      user.profileImage = updateData.profileImage;
+      console.log('Setting profileImage to:', updateData.profileImage);
+    }
+
+    // Only allow password update if specifically handled, usually separate endpoint.
+    // But if requested here:
+    if (updateData.password) {
+      user.password = await this.hashPassword(updateData.password);
+    }
+
+    await user.save();
+
+    console.log('User after save - profileImage:', user.profileImage);
+    console.log('=================================');
+
+    return user.toSafeObject();
+  }
 }
 
 // Export singleton instance
