@@ -47,9 +47,50 @@ class PaymentService {
     });
 
     if (existingPayment) {
-      const error = new Error('Payment already exists for this order');
-      error.statusCode = 400;
-      throw error;
+      // If payment was already successful, reject
+      if (existingPayment.status === PAYMENT_STATUS.SUCCESS) {
+        const error = new Error('Payment already completed for this order');
+        error.statusCode = 400;
+        throw error;
+      }
+
+      // If payment was created but not completed, retrieve existing payment intent
+      try {
+        const existingPaymentIntent = await stripe.paymentIntents.retrieve(existingPayment.paymentIntentId);
+
+        // If the payment intent is still usable (requires_payment_method or requires_confirmation)
+        if (['requires_payment_method', 'requires_confirmation', 'requires_action'].includes(existingPaymentIntent.status)) {
+          return {
+            paymentId: existingPayment._id,
+            clientSecret: existingPaymentIntent.client_secret,
+            amount: order.totalAmount,
+            currency: stripeCurrency,
+          };
+        }
+
+        // If payment intent is in a terminal state (canceled, failed), delete old record and create new
+        if (['canceled', 'requires_capture'].includes(existingPaymentIntent.status)) {
+          existingPayment.status = PAYMENT_STATUS.FAILED;
+          await existingPayment.save();
+        } else if (existingPaymentIntent.status === 'succeeded') {
+          // Payment was successful on Stripe side, update local status
+          existingPayment.status = PAYMENT_STATUS.SUCCESS;
+          await existingPayment.save();
+
+          // Update order status too
+          order.status = ORDER_STATUS.PAID;
+          await order.save();
+
+          const error = new Error('Payment already completed for this order');
+          error.statusCode = 400;
+          throw error;
+        }
+      } catch (stripeError) {
+        // If we can't retrieve the payment intent, mark old payment as failed and create new
+        console.error('Error retrieving existing payment intent:', stripeError);
+        existingPayment.status = PAYMENT_STATUS.FAILED;
+        await existingPayment.save();
+      }
     }
 
     // Create Stripe payment intent
