@@ -11,6 +11,60 @@ import { INSTALLATION_STATUS } from '../constants/installationStatus.js';
 
 class ReviewService {
   /**
+   * Add a review for a product (SolarPanel)
+   * @param {string} customerId
+   * @param {string} solarPanelId
+   * @param {number} rating
+   * @param {string} comment
+   * @returns {Promise<Object>}
+   */
+  async addProductReview(customerId, solarPanelId, rating, comment) {
+    // 1. Check if review already exists for this user and product
+    const existingReview = await Review.findOne({ customer: customerId, solarPanel: solarPanelId });
+    if (existingReview) {
+      const error = new Error('You have already reviewed this product');
+      error.statusCode = 400;
+      throw error;
+    }
+
+    // 2. Verify that the user has actually purchased this product (Verified Purchase)
+    const verifiedOrder = await Order.findOne({
+      user: customerId,
+      status: ORDER_STATUS.PAID,
+      'items.solarPanel': solarPanelId
+    }).sort({ createdAt: -1 }); // Get latest order if multiple
+
+    if (!verifiedOrder) {
+      const error = new Error('You can only review products you have purchased (Verified Purchase)');
+      error.statusCode = 403;
+      throw error;
+    }
+
+    // 3. Create review
+    const review = await Review.create({
+      solarPanel: solarPanelId,
+      customer: customerId,
+      order: verifiedOrder._id, // Link to the verified order for traceability
+      rating,
+      comment: comment || '',
+    });
+
+    await review.populate('customer', 'email firstName lastName profileImage');
+    return review;
+  }
+
+  /**
+   * Get reviews for a specific product
+   * @param {string} solarPanelId
+   * @returns {Promise<Array>}
+   */
+  async getProductReviews(solarPanelId) {
+    return await Review.find({ solarPanel: solarPanelId })
+      .populate('customer', 'email firstName lastName profileImage')
+      .sort({ createdAt: -1 });
+  }
+
+  /**
    * Add a review for an order
    * @param {string} customerId
    * @param {string} orderId
@@ -131,6 +185,23 @@ class ReviewService {
     }
 
     return review;
+  }
+
+  /**
+   * Delete a review (Admin only)
+   * @param {string} reviewId
+   * @returns {Promise<void>}
+   */
+  async deleteReview(reviewId) {
+    const review = await Review.findById(reviewId);
+
+    if (!review) {
+      const error = new Error('Review not found');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    await Review.findByIdAndDelete(reviewId);
   }
 }
 

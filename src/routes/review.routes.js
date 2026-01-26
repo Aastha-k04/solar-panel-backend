@@ -137,4 +137,41 @@ router.get('/my', authenticate, customerOnly, reviewController.getMyReviews.bind
  */
 router.get('/', authenticate, adminOnly, reviewController.getAllReviews.bind(reviewController));
 
+/**
+ * @swagger
+ * /api/v1/reviews/product/{id}:
+ *   get:
+ *     summary: Get reviews for a specific product
+ *     tags: [Reviews]
+ *     responses:
+ *       200:
+ *         description: Reviews retrieved successfully
+ */
+router.get('/product/:id', reviewController.getProductReviews.bind(reviewController));
+
+/**
+ * @swagger
+ * /api/v1/reviews/{id}:
+ *   delete:
+ *     summary: Delete a review (Admin only)
+ *     tags: [Reviews]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Review ID
+ *     responses:
+ *       200:
+ *         description: Review deleted successfully
+ *       403:
+ *         description: Forbidden - Admin only
+ *       404:
+ *         description: Review not found
+ */
+router.delete('/:id', authenticate, adminOnly, reviewController.deleteReview.bind(reviewController));
+
 export default router;

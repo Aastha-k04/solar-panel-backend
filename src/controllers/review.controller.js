@@ -14,9 +14,16 @@ class ReviewController {
   async addReview(req, res, next) {
     try {
       const customerId = req.user.userId;
-      const { orderId, rating, comment } = req.body;
+      const { orderId, solarPanelId, rating, comment } = req.body;
 
-      const review = await reviewService.addReview(customerId, orderId, rating, comment);
+      let review;
+      if (solarPanelId) {
+        review = await reviewService.addProductReview(customerId, solarPanelId, rating, comment);
+      } else if (orderId) {
+        review = await reviewService.addReview(customerId, orderId, rating, comment);
+      } else {
+        return res.status(400).json({ success: false, message: 'Either orderId or solarPanelId is required' });
+      }
 
       res.status(201).json({
         success: true,
@@ -24,6 +31,25 @@ class ReviewController {
         data: {
           review,
         },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Get product reviews
+   * @route GET /api/v1/reviews/product/:id
+   */
+  async getProductReviews(req, res, next) {
+    try {
+      const { id } = req.params;
+      const reviews = await reviewService.getProductReviews(id);
+
+      res.status(200).json({
+        success: true,
+        count: reviews.length,
+        data: { reviews }
       });
     } catch (error) {
       next(error);
@@ -70,6 +96,26 @@ class ReviewController {
         data: {
           reviews,
         },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Delete a review (Admin only)
+   * @route DELETE /api/v1/reviews/:id
+   * @access Admin only
+   */
+  async deleteReview(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      await reviewService.deleteReview(id);
+
+      res.status(200).json({
+        success: true,
+        message: 'Review deleted successfully',
       });
     } catch (error) {
       next(error);

@@ -10,9 +10,12 @@ const reviewSchema = new mongoose.Schema(
     order: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Order',
-      required: true,
-      unique: true, // One review per order
-      index: true,
+      required: false, // Optional now
+    },
+    solarPanel: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'SolarPanel',
+      required: false,
     },
     customer: {
       type: mongoose.Schema.Types.ObjectId,

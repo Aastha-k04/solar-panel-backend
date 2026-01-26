@@ -5,14 +5,20 @@ import mongoose from 'mongoose';
  */
 
 export const validateAddReview = (req, res, next) => {
-  const { orderId, rating, comment } = req.body;
+  const { orderId, solarPanelId, rating, comment } = req.body;
   const errors = [];
 
-  // Order ID validation
-  if (!orderId) {
-    errors.push('Order ID is required');
-  } else if (!mongoose.Types.ObjectId.isValid(orderId)) {
+  // Target ID validation
+  if (!orderId && !solarPanelId) {
+    errors.push('Either Order ID or Solar Panel ID is required');
+  }
+
+  if (orderId && !mongoose.Types.ObjectId.isValid(orderId)) {
     errors.push('Invalid order ID format');
+  }
+
+  if (solarPanelId && !mongoose.Types.ObjectId.isValid(solarPanelId)) {
+    errors.push('Invalid solar panel ID format');
   }
 
   // Rating validation
