@@ -14,7 +14,11 @@ const app = express();
 // ═══════════════════════════════════════════════════════
 // SECURITY MIDDLEWARES
 // ═══════════════════════════════════════════════════════
-app.use(helmet()); // Set security HTTP headers
+// Configure Helmet with cross-origin policies that allow image loading
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }, // Allow cross-origin image loading
+  crossOriginEmbedderPolicy: false, // Disable to allow embedding
+}));
 
 // ═══════════════════════════════════════════════════════
 // CORS CONFIGURATION
@@ -38,6 +42,19 @@ if (process.env.NODE_ENV === 'development') {
 // ═══════════════════════════════════════════════════════
 app.use(express.json({ limit: '10mb' })); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true, limit: '10mb' })); // Parse URL-encoded bodies
+
+// Serve static files from uploads directory with CORS headers
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Add CORS headers specifically for uploads
+app.use('/uploads', (req, res, next) => {
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+}, express.static(path.join(__dirname, '../uploads')));
 
 // ═══════════════════════════════════════════════════════
 // HEALTH CHECK ROUTE

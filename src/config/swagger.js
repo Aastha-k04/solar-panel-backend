@@ -149,6 +149,32 @@ const options = {
           enum: ['ADMIN', 'CUSTOMER', 'TECHNICIAN'],
           description: 'User role in the system',
         },
+        UpdateProfileRequest: {
+          type: 'object',
+          properties: {
+            firstName: {
+              type: 'string',
+              example: 'John',
+            },
+            lastName: {
+              type: 'string',
+              example: 'Doe',
+            },
+            phoneNumber: {
+              type: 'string',
+              example: '+1234567890',
+            },
+            profileImage: {
+              type: 'string',
+              example: 'https://example.com/profile.jpg',
+            },
+            password: {
+              type: 'string',
+              format: 'password',
+              example: 'newpassword123',
+            },
+          },
+        },
         // Add to components.schemas
         AuthResponse: {
           type: 'object',
